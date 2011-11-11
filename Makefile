@@ -54,7 +54,7 @@
 ## MCU = atxmega256a3
 ## MCU = atxmega256a3b
 ## MCU = atxmega16d4
-MCU = atxmega64a3
+MCU = atxmega16d4
 
 # Is this a bootloader?
 #MAKE_BOOTLOADER=no
@@ -71,8 +71,8 @@ MAKE_BOOTLOADER=yes
 PROG_BOOT_ONLY=yes
 
 # CPU Frequency
-F_CPU=2000000
-#F_CPU=32000000
+#F_CPU=2000000
+F_CPU=32000000
 
 # for xboot automated configuration - overrides MCU and F_CPU if present
 -include xboot-config.mk
@@ -219,7 +219,7 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 # Type: avrdude -c ?
 # to get a full listing.
 #
-AVRDUDE_PROGRAMMER = jtag2pdi
+AVRDUDE_PROGRAMMER = avrispmkii
 #AVRDUDE_PROGRAMMER = avr109
 
 # Port
