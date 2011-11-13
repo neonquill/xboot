@@ -54,6 +54,26 @@
 ## MCU = atxmega256a3
 ## MCU = atxmega256a3b
 ## MCU = atxmega16d4
+## MCU = atxmega32d4
+## MCU = atxmega64d3
+## MCU = atxmega64d4
+## MCU = atxmega128d3
+## MCU = atxmega128d4
+## MCU = atxmega192d3
+## MCU = atxmega256d3
+## MCU = atxmega16a4u
+## MCU = atxmega32a4u
+## MCU = atxmega64a3u
+## MCU = atxmega64a4u
+## MCU = atxmega128a3u
+## MCU = atxmega128a4u
+## MCU = atxmega192a3u
+## MCU = atxmega256a3u
+## MCU = atxmega256a3bu
+## MCU = atxmega64b1
+## MCU = atxmega64b3
+## MCU = atxmega128b1
+## MCU = atxmega128b3
 MCU = atxmega16d4
 
 # Is this a bootloader?
@@ -148,6 +168,7 @@ COMMON_FLAGS = -g$(DEBUG)
 COMMON_FLAGS += $(CDEFS) $(CINCS)
 COMMON_FLAGS += -O$(OPT)
 COMMON_FLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+COMMON_FLAGS += -ffunction-sections -fdata-sections
 COMMON_FLAGS += -Wall
 COMMON_FLAGS += -Wa,-adhlns=$(basename $<).lst
 COMMON_FLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
@@ -208,6 +229,7 @@ EXTMEMOPTS =
 #    -Map:      create map file
 #    --cref:    add cross reference to  map file
 LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
+LDFLAGS += -Wl,--gc-sections
 LDFLAGS += $(EXTMEMOPTS)
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 
@@ -230,7 +252,7 @@ AVRDUDE_PORT = usb
 #AVRDUDE_PORT = /dev/ttyUSB0
 
 # BAUD Rate
-#AVRDUDE_BAUD = 19200
+#AVRDUDE_BAUD = 115200
 
 # Sections to write
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
@@ -342,43 +364,23 @@ endif
 # ---------------------------------------------------------------------------
 
 # Processor definitions
-ifeq ($(MCU), $(filter $(MCU), atxmega16a4 atxmega16d4))
+MCU_S = $(subst atxmega,x,$(MCU))
+ifneq ($(filter $(MCU_S), x16a4 x16d4 x16a4u),)
   BOOT_SECTION_START		=0x004000
 endif
-ifeq ($(MCU), atxmega32a4)
+ifneq ($(filter $(MCU_S), x32a4 x32d4 x32a4u),)
   BOOT_SECTION_START		=0x008000
 endif
-ifeq ($(MCU), atxmega64a1)
+ifneq ($(filter $(MCU_S), x64a1 x64a3 x64a4 x64d3 x64d4 x64a3u x64a4u x64b1 x64b3),)
   BOOT_SECTION_START		=0x010000
 endif
-ifeq ($(MCU), atxmega64a3)
-  BOOT_SECTION_START		=0x010000
-endif
-ifeq ($(MCU), atxmega64a4)
-  BOOT_SECTION_START		=0x010000
-endif
-ifeq ($(MCU), atxmega128a1)
+ifneq ($(filter $(MCU_S), x128a1 x128a3 x128a4 x128d3 x128d4 x128a3u x128a4u x128b1 x128b3),)
   BOOT_SECTION_START		=0x020000
 endif
-ifeq ($(MCU), atxmega128a3)
-  BOOT_SECTION_START		=0x020000
-endif
-ifeq ($(MCU), atxmega128a4)
-  BOOT_SECTION_START		=0x020000
-endif
-ifeq ($(MCU), atxmega192a1)
+ifneq ($(filter $(MCU_S), x192a1 x192a3 x192d3 x192a3u),)
   BOOT_SECTION_START		=0x030000
 endif
-ifeq ($(MCU), atxmega192a3)
-  BOOT_SECTION_START		=0x030000
-endif
-ifeq ($(MCU), atxmega256a1)
-  BOOT_SECTION_START		=0x040000
-endif
-ifeq ($(MCU), atxmega256a3)
-  BOOT_SECTION_START		=0x040000
-endif
-ifeq ($(MCU), atxmega256a3b)
+ifneq ($(filter $(MCU_S), x256a1 x256a3 x256a3b x256d3 x256a3u x256a3bu),)
   BOOT_SECTION_START		=0x040000
 endif
 
